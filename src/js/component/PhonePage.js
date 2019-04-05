@@ -1,9 +1,9 @@
+import {CatalogPhone, SidebarElement} from "./index.js";
+
 export default class PhonePage {
 
-  constructor({element, catalogPhone, sidebar}) {
+  constructor({element}) {
     this.element = element;
-    this.sidebar = sidebar;
-    this.catalogPhone = catalogPhone;
     this._render();
   }
 
@@ -12,11 +12,11 @@ export default class PhonePage {
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-2">
-            ${this.sidebar}
+            ${new SidebarElement()}
           </div>
           <!--Main content-->
           <div class="col-md-10">
-            ${this.catalogPhone}
+            ${new CatalogPhone}
           </div>
         </div>
       </div>
