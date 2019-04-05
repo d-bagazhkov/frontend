@@ -5,6 +5,8 @@ export default class PhoneRepository {
 
     xhr.open('GET', 'src/api/phones.json', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Content-Security-Policy', "default-src 'self'");
+
 
     xhr.onreadystatechange = function() {
       if (xhr.readyState !== 4 && xhr.status !== 200) return;
