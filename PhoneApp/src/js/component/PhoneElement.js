@@ -1,15 +1,21 @@
-import {ReproducingElement} from "./ReproducingElement.js";
+import {InnerElement} from "./InnerElement.js";
 
-export class PhoneElement extends ReproducingElement {
+export class PhoneElement extends InnerElement {
+
+  constructor({phoneInfo}) {
+    super();
+
+    this._phoneInfo = phoneInfo;
+  }
 
   _render() {
-    this._element = `
+    return `
       <li class="thumbnail">
-        <a href="#!/phones/samsung-gem" class="thumb">
-          <img alt="Samsung Gem™" src="img/phones/samsung-gem.0.jpg">
+        <a href="#!/phones/${this._phoneInfo.id}" class="thumb">
+          <img alt="${this._phoneInfo.name}" src="src/${this._phoneInfo.imageUrl}">
         </a>
-        <a href="#!/phones/samsung-gem">Samsung Gem™</a>
-        <p>The Samsung Gem™ brings you everything that you would expect and more from a touch display smart phone – more apps, more features and a more affordable price.</p>
+        <a href="#!/phones/${this._phoneInfo.id}">${this._phoneInfo.name}</a>
+        <p>${this._phoneInfo.snippet}</p>
       </li>
     `;
   }

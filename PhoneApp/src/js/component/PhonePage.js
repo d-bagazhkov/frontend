@@ -1,30 +1,25 @@
-import {ReproducingElement} from './ReproducingElement.js';
-import {SidebarElement} from "./SidebarElement.js";
-import {CatalogPhone} from "./CatalogPhone.js";
+export default class PhonePage {
 
-export default class PhonePage extends ReproducingElement {
+  constructor({element, catalogPhone, sidebar}) {
+    this.element = element;
+    this.sidebar = sidebar;
+    this.catalogPhone = catalogPhone;
+    this._render();
+  }
 
   _render() {
-    this._element.innerHTML = `
+    this.element.innerHTML = `
       <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2">
-        ${
-          new SidebarElement({
-            element: null
-          })
-        }
+        <div class="row">
+          <div class="col-md-2">
+            ${this.sidebar}
+          </div>
+          <!--Main content-->
+          <div class="col-md-10">
+            ${this.catalogPhone}
+          </div>
+        </div>
       </div>
-      <!--Main content-->
-      <div class="col-md-10">
-        ${
-        new CatalogPhone({
-          element: null
-        })
-        }
-      </div>
-    </div>
-  </div>
     `;
   }
 

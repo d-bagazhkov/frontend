@@ -1,9 +1,9 @@
-import {ReproducingElement} from "./ReproducingElement.js";
+import {InnerElement} from "./InnerElement.js";
 
-export class SidebarElement extends ReproducingElement {
+export default class SidebarElement extends InnerElement {
 
   _render() {
-    this._element.innerHTML = `
+    return `
       <section>
         <p>
           Search:
