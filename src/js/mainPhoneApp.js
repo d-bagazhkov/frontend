@@ -1,4 +1,4 @@
-import {PhonePage, SidebarElement, CatalogPhone} from './component/index.js';
+import {PhonePage, SidebarElement, CatalogPhone} from './component';
 
 new PhonePage({
   element: document.querySelector("[data-root]"),
