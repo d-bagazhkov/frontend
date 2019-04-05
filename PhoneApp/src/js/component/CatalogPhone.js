@@ -1,5 +1,5 @@
 import {InnerElement} from "./InnerElement.js";
-import {PhoneRepository} from "../repository";
+import {PhoneRepository} from "../repository/index.js";
 import {PhoneElement} from "./PhoneElement.js";
 
 export default class CatalogPhone extends InnerElement {
