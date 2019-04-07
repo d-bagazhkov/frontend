@@ -1,9 +1,9 @@
 export default class PhoneRepository {
 
-  getAllPhone(callback) {
+  request(path, callback) {
     let xhr = new XMLHttpRequest();
 
-    xhr.open('GET', 'src/api/phones.json', true);
+    xhr.open('GET', path, true);
     xhr.setRequestHeader('Content-Type', 'application/json');
 
     xhr.onreadystatechange = function() {
@@ -14,8 +14,12 @@ export default class PhoneRepository {
     xhr.send();
   }
 
-  findDetailsById(id) {
-    //todo
+  getAllPhone(callback) {
+    this.request("./src/api/phones.json", callback)
+  }
+
+  getDetailsByIdPhone(id, callback) {
+    this.request(`./src/api/${id}.json`, callback)
   }
 
 

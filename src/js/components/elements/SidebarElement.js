@@ -2,6 +2,12 @@ import {InnerElement} from "./InnerElement.js";
 
 export default class SidebarElement extends InnerElement {
 
+  constructor() {
+    super();
+
+    this._element.innerHTML = this._render();
+  }
+
   _render() {
     return `
       <section>

@@ -6,6 +6,7 @@ export class PhoneElement extends InnerElement {
     super();
 
     this._phoneInfo = phoneInfo;
+    this._element.innerHTML = this._render();
   }
 
   _render() {
