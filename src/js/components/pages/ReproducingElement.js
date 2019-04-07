@@ -3,17 +3,18 @@ export default class ReproducingElement {
   constructor({element, components}) {
     this._element = element;
     this._components = components;
-    this._prepare();
+    this._prepare(this._render());
   }
 
   _render() {
     throw new Error("Need overwrite this function!");
   }
 
-  _prepare() {
+  _prepare(landing) {
     let tmpElem = document.createElement("div");
-    tmpElem.innerHTML = this._render();
+    tmpElem.innerHTML = landing;
     this.checkChildren(tmpElem);
+    this._element.innerHTML = "";
     for (let i = 0; i < tmpElem.children.length; i++) {
       this._element.appendChild(tmpElem.children.item(i))
     }
@@ -31,9 +32,16 @@ export default class ReproducingElement {
         let newElement = this._components[de].getElement();
         if (child.classList.length)
           newElement.classList.add(...child.classList);
+        if (child.id)
+          newElement.id = child.id;
+        newElement.dataset.element = child.dataset.element;
         child.replaceWith(newElement);
       }
     }
   };
+
+  _repaint() {
+    this._prepare(this._element.innerHTML);
+  }
 
 }
