@@ -35,8 +35,13 @@ export default class PhonePage extends ReproducingElement {
       || event.target.nodeName === "IMG"
       && event.target.parentElement.parentElement.classList.contains("thumbnail"):
         this._element.querySelector('[data-element="CatalogPhone"]').dataset.element = "PhoneDetails";
+        this._components["PhoneDetails"].setPhoneId((event.target.nodeName === "A" && event.target
+            || event.target.nodeName === "IMG" && event.target.parentElement)
+            .getAttribute("href")
+            .substr(10));
         break;
       case event.target.dataset.backbutton !== undefined:
+        console.log("details page");
         this._element.querySelector('[data-element="PhoneDetails"]').dataset.element = "CatalogPhone";
         break;
       default:

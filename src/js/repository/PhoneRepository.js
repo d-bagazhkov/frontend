@@ -19,7 +19,7 @@ export default class PhoneRepository {
   }
 
   getDetailsByIdPhone(id, callback) {
-    this.request(`./src/api/${id}.json`, callback)
+    this.request(`./src/api/phones/${id}.json`, callback)
   }
 
 

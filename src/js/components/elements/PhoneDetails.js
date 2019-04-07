@@ -1,44 +1,44 @@
 import {InnerElement} from "./InnerElement.js";
+import {PhoneRepository} from "../../repository/index.js";
 
 export default class PhoneDetails extends InnerElement {
 
   constructor() {
     super();
-    this._element.innerHTML = this._render();
+    this.repository = new PhoneRepository();
   }
 
+  setPhoneId(id) {
+    console.log(id);
+    this.repository.getDetailsByIdPhone(id, (json) => {
+      this.detailsPhone = json;
+      this._element.innerHTML = this._render();
+    });
+  }
 
   _render() {
     return `
       <div>
         <div>
       
-          <img class="phone" src="src/img/phones/motorola-xoom-with-wi-fi.0.jpg">
+          <img class="phone" src="src/${this.detailsPhone.images[0]}">
       
           <button data-backButton>Back</button>
           <button>Add to basket</button>
       
       
-          <h1>Motorola XOOM™ with Wi-Fi</h1>
+          <h1>${this.detailsPhone.name}</h1>
       
-          <p>Motorola XOOM with Wi-Fi has a super-powerful dual-core processor and Android™ 3.0 (Honeycomb) — the Android platform designed specifically for tablets. With its 10.1-inch HD widescreen display, you’ll enjoy HD video in a thin, light, powerful and upgradeable tablet.</p>
+          <p>${this.detailsPhone.description}</p>
       
           <ul class="phone-thumbs">
-            <li>
-              <img src="src/img/phones/motorola-xoom-with-wi-fi.0.jpg">
-            </li>
-            <li>
-              <img src="src/img/phones/motorola-xoom-with-wi-fi.1.jpg">
-            </li>
-            <li>
-              <img src="src/img/phones/motorola-xoom-with-wi-fi.2.jpg">
-            </li>
-            <li>
-              <img src="src/img/phones/motorola-xoom-with-wi-fi.3.jpg">
-            </li>
-            <li>
-              <img src="src/img/phones/motorola-xoom-with-wi-fi.4.jpg">
-            </li>
+            ${
+              this.detailsPhone.images.map(value => `
+              <li>
+                <img src="src/${value}">
+              </li>
+            `).join("")
+            }
             <li>
               <img src="src/img/phones/motorola-xoom-with-wi-fi.5.jpg">
             </li>
@@ -49,102 +49,107 @@ export default class PhoneDetails extends InnerElement {
               <span>Availability and Networks</span>
               <dl>
                 <dt>Availability</dt>
-                <dd></dd>
-              </dl>
-            </li>
-            <li>
-              <span>Battery</span>
-              <dl>
-                <dt>Type</dt>
-                <dd>Other ( mAH)</dd>
+                
+                ${
+                  this.detailsPhone.availability
+                  .map(value => `
+                  <dd>${value}</dd>
+                `).join("")
+                }
+                </dl>
+              </li>
+              <li>
+                <span>Battery</span>
+                <dl>
+                  <dt>Type</dt>
+                  <dd>${this.detailsPhone.battery.type}</dd>
                 <dt>Talk Time</dt>
-                <dd>24 hours</dd>
+                <dd>${this.detailsPhone.battery.talkTime}</dd>
                 <dt>Standby time (max)</dt>
-                <dd>336 hours</dd>
+                <dd>${this.detailsPhone.battery.standbyTime}</dd>
               </dl>
             </li>
             <li>
               <span>Storage and Memory</span>
               <dl>
                 <dt>RAM</dt>
-                <dd>1000MB</dd>
+                <dd>${this.detailsPhone.storage.flash}</dd>
                 <dt>Internal Storage</dt>
-                <dd>32000MB</dd>
+                <dd>${this.detailsPhone.storage.ram}</dd>
               </dl>
             </li>
             <li>
               <span>Connectivity</span>
               <dl>
                 <dt>Network Support</dt>
-                <dd></dd>
+                <dd>${this.detailsPhone.connectivity.cell}</dd>
                 <dt>WiFi</dt>
-                <dd>802.11 b/g/n</dd>
+                <dd>${this.detailsPhone.connectivity.wifi}</dd>
                 <dt>Bluetooth</dt>
-                <dd>Bluetooth 2.1</dd>
+                <dd>${this.detailsPhone.connectivity.bluetooth}</dd>
                 <dt>Infrared</dt>
-                <dd>✘</dd>
+                <dd>${this.detailsPhone.connectivity.infrared && "✓" || "✘"}</dd>
                 <dt>GPS</dt>
-                <dd>✓</dd>
+                <dd>${this.detailsPhone.connectivity.gps && "✓" || "✘"}</dd>
               </dl>
             </li>
             <li>
               <span>Android</span>
               <dl>
                 <dt>OS Version</dt>
-                <dd>Android 3.0</dd>
+                <dd>${this.detailsPhone.android.os}</dd>
                 <dt>UI</dt>
-                <dd>Honeycomb</dd>
+                <dd>${this.detailsPhone.android.ui}</dd>
               </dl>
             </li>
             <li>
               <span>Size and Weight</span>
               <dl>
                 <dt>Dimensions</dt>
-                <dd>249.1 mm (w)</dd>
-                <dd>167.8 mm (h)</dd>
-                <dd>12.9 mm (d)</dd>
+                ${this.detailsPhone.sizeAndWeight.dimensions
+                    .map(value => `<dd>${value}</dd>`).join("")}
                 <dt>Weight</dt>
-                <dd>708.0 grams</dd>
+                <dd>${this.detailsPhone.sizeAndWeight.weight}</dd>
               </dl>
             </li>
             <li>
               <span>Display</span>
               <dl>
                 <dt>Screen size</dt>
-                <dd>10.1 inches</dd>
+                <dd>${this.detailsPhone.display.screenSize}</dd>
                 <dt>Screen resolution</dt>
-                <dd>WXGA (1200 x 800)</dd>
+                <dd>${this.detailsPhone.display.screenResolution}</dd>
                 <dt>Touch screen</dt>
-                <dd>✓</dd>
+                <dd>${this.detailsPhone.display.touchScreen && "✓" || "✘"}</dd>
               </dl>
             </li>
             <li>
               <span>Hardware</span>
               <dl>
                 <dt>CPU</dt>
-                <dd>1 GHz Dual Core Tegra 2</dd>
+                <dd>${this.detailsPhone.hardware.cpu}</dd>
                 <dt>USB</dt>
-                <dd>USB 2.0</dd>
+                <dd>${this.detailsPhone.hardware.usb}</dd>
                 <dt>Audio / headphone jack</dt>
-                <dd>3.5mm</dd>
+                <dd>${this.detailsPhone.hardware.audioJack}</dd>
                 <dt>FM Radio</dt>
-                <dd>✘</dd>
+                <dd>${this.detailsPhone.hardware.fmRadio && "✓" || "✘"}</dd>
                 <dt>Accelerometer</dt>
-                <dd>✓</dd>
+                <dd>${this.detailsPhone.hardware.accelerometer && "✓" || "✘"}</dd>
               </dl>
             </li>
             <li>
               <span>Camera</span>
               <dl>
                 <dt>Primary</dt>
-                <dd>5.0 megapixels</dd>
+                <dd>${this.detailsPhone.camera.primary}</dd>
                 <dt>Features</dt>
-                <dd>Flash, Video</dd>
+                <dd>${this.detailsPhone.camera.features.join(", ")}</dd>
               </dl>
             </li>
             <li>
               <span>Additional Features</span>
-              <dd>Sensors: proximity, ambient light, barometer, gyroscope</dd>
+              <dd>${this.detailsPhone.additionalFeatures}</dd>
             </li>
           </ul>
         </div>
