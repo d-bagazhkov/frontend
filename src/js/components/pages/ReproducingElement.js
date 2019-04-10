@@ -1,22 +1,22 @@
 export default class ReproducingElement {
 
-  constructor({element, components}) {
-    this._element = element;
-    this._components = components;
-    this._prepare(this._render());
+  constructor({element, components = []}) {
+    this.element = element;
+    this.components = components;
+    this.paint();
   }
 
-  _render() {
+  render() {
     throw new Error("Need overwrite this function!");
   }
 
-  _prepare(landing) {
+  paint() {
     let tmpElem = document.createElement("div");
-    tmpElem.innerHTML = landing;
+    tmpElem.innerHTML = this.render();
     this.checkChildren(tmpElem);
-    this._element.innerHTML = "";
+    this.element.innerHTML = "";
     for (let i = 0; i < tmpElem.children.length; i++) {
-      this._element.appendChild(tmpElem.children.item(i))
+      this.element.appendChild(tmpElem.children.item(i))
     }
   }
 
@@ -29,7 +29,7 @@ export default class ReproducingElement {
           this.checkChildren(child);
         }
       } else {
-        let newElement = this._components[de].getElement();
+        let newElement = this.components[de].getElement();
         if (child.classList.length)
           newElement.classList.add(...child.classList);
         if (child.id)
@@ -40,8 +40,8 @@ export default class ReproducingElement {
     }
   };
 
-  _repaint() {
-    this._prepare(this._element.innerHTML);
+  repaint() {
+    this.prepare(this.element.innerHTML);
   }
 
 }

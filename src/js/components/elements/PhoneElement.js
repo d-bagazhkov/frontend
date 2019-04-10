@@ -1,6 +1,6 @@
-import {InnerElement} from "./InnerElement.js";
+import {Component} from "../../services/Component.js";
 
-export class PhoneElement extends InnerElement {
+export class PhoneElement extends Component {
 
   constructor({phoneInfo}) {
     super();

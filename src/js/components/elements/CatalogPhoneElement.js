@@ -1,8 +1,8 @@
-import {InnerElement} from "./InnerElement.js";
+import {Component} from "../../services/Component.js";
 import {PhoneRepository} from "../../repository/index.js";
 import {PhoneElement} from "./PhoneElement.js";
 
-export default class CatalogPhone extends InnerElement {
+export default class CatalogPhoneElement extends Component {
 
   constructor() {
     super();

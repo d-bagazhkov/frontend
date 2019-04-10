@@ -1,53 +1,43 @@
-import {CatalogPhone, PhoneDetails, SidebarElement} from "../index.js";
-import ReproducingElement from "./ReproducingElement.js";
+import {Component} from "../../services/Component.js";
+import AppRegistry from "../../services/AppRegistry.js";
+import {SidebarElement, ShoppingCartElement, CatalogPhoneElement, PhoneDetailsElement} from "../index.js";
 
-export default class PhonePage extends ReproducingElement {
+export default class PhonePage extends Component {
 
-  constructor(props) {
-    super({
-      ...props,
-      components: {
-        SidebarElement: new SidebarElement(),
-        CatalogPhone: new CatalogPhone(),
-        PhoneDetails: new PhoneDetails()
-      }
-    });
-    this._element.addEventListener("click", this.details.bind(this));
-  }
-
-  _render() {
+  render() {
     return `
-      <div class="container-fluid">
+      <div id="PhonePage" class="container-fluid">
         <div class="row">
-          <div data-element="SidebarElement" class="col-md-2"></div>
-          <!--Main content-->
-          <div id="mainContent" data-element="CatalogPhone" class="col-md-10" /></div>
+          <div class="col-md-2">
+            <div id="SidebarElement"></div>
+            <div id="ShoppingCartElement"></div>
+          </div>
+          <div data-element="CatalogPhone" class="col-md-10" /></div>
         </div>
       </div>
     `;
   }
 
-  details(event) {
-    console.log();
-    switch (true) {
-      case event.target.nodeName === "A"
-      && event.target.parentElement.classList.contains("thumbnail")
-      || event.target.nodeName === "IMG"
-      && event.target.parentElement.parentElement.classList.contains("thumbnail"):
-        this._element.querySelector('[data-element="CatalogPhone"]').dataset.element = "PhoneDetails";
-        this._components["PhoneDetails"].setPhoneId((event.target.nodeName === "A" && event.target
-            || event.target.nodeName === "IMG" && event.target.parentElement)
-            .getAttribute("href")
-            .substr(10));
-        break;
-      case event.target.dataset.backbutton !== undefined:
-        console.log("details page");
-        this._element.querySelector('[data-element="PhoneDetails"]').dataset.element = "CatalogPhone";
-        break;
-      default:
-        return;
-    }
-    this._repaint();
+  after() {
+    AppRegistry.render({
+      component: new SidebarElement(),
+      element: this.element
+    });
+    AppRegistry.render({
+      component: new ShoppingCartElement(),
+      element: this.element
+    });
+    if (!this.state.selectedPhoneId)
+      AppRegistry.render({
+        component: new CatalogPhoneElement(),
+        element: this.element
+      });
+    else
+      AppRegistry.render({
+        component: new PhoneDetailsElement(this.state.selectedPhoneId),
+        element: this.element
+      });
   }
+
 
 }
