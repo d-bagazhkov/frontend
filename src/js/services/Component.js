@@ -6,7 +6,9 @@ export class Component {
   state = {};
 
   constructor() {
+    this.beforeCreate && this.beforeCreate();
     this.exec();
+    this.afterCreate && this.afterCreate();
   }
 
   render() {
@@ -15,9 +17,9 @@ export class Component {
   }
 
   exec() {
-    this.before && this.before();
+    this.beforeMount && this.beforeMount();
     this._element.innerHTML = this.render();
-    this.after && this.after();
+    this.afterMount && this.afterMount();
   }
 
   get element() {
@@ -31,7 +33,7 @@ export class Component {
   setState(newState = {}) {
     this.state = newState;
     this.exec();
-    AppRegistry.render({selector: "#" + this.id, component: this});
+    AppRegistry.render({selector: "#" + this.id, component: this, element: this._element});
   }
 
   getState() {

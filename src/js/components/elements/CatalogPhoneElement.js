@@ -1,26 +1,36 @@
 import {Component} from "../../services/Component.js";
 import {PhoneRepository} from "../../repository/index.js";
-import {PhoneElement} from "./PhoneElement.js";
 
 export default class CatalogPhoneElement extends Component {
 
-  constructor() {
-    super();
-    this.repository = new PhoneRepository();
-    this._element.innerHTML = this._render();
-    this.repository.getAllPhone((json) => {
-      let content = json
-          .map(phoneInfo =>
-              new PhoneElement({phoneInfo})
-          )
-          .join('');
-      let elem = this._element.querySelector("ul.phones");
-      elem.innerHTML = content;
-    });
+  state = {
+    phones: []
+  };
+
+  render() {
+    let phones;
+    return `
+      <div id="CatalogPhoneElement" class="col-md-10">
+        <ul class="phones">
+          ${(phones = this.state.phones) && phones.map(phone => `
+            <li id="${phone.id}" class="thumbnail">
+              <a href="#!/phones/${phone.id}" class="thumb">
+                <img alt="${phone.name}" src="src/${phone.imageUrl}">
+              </a>
+              <a href="#!/phones/${phone.id}">${phone.name}</a>
+              <p>${phone.snippet}</p>
+            </li>
+          `)}
+        </ul>
+      </div>
+    `;
   }
 
-  _render() {
-    return `<ul class="phones"></ul>`;
+  afterCreate() {
+    this.repository = new PhoneRepository();
+    this.repository.getAllPhone((phones) => {
+      this.setState({phones});
+    });
   }
 
 }

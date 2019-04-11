@@ -12,30 +12,30 @@ export default class PhonePage extends Component {
             <div id="SidebarElement"></div>
             <div id="ShoppingCartElement"></div>
           </div>
-          <div data-element="CatalogPhone" class="col-md-10" /></div>
+          <div id="CatalogPhoneElement"  /></div>
         </div>
       </div>
     `;
   }
 
-  after() {
+  afterMount() {
     AppRegistry.render({
-      component: new SidebarElement(),
-      element: this.element
+      element: this.element,
+      component: new SidebarElement()
     });
     AppRegistry.render({
-      component: new ShoppingCartElement(),
-      element: this.element
+      element: this.element,
+      component: new ShoppingCartElement()
     });
     if (!this.state.selectedPhoneId)
       AppRegistry.render({
-        component: new CatalogPhoneElement(),
-        element: this.element
+        element: this.element,
+        component: new CatalogPhoneElement()
       });
     else
       AppRegistry.render({
-        component: new PhoneDetailsElement(this.state.selectedPhoneId),
-        element: this.element
+        element: this.element,
+        component: new PhoneDetailsElement(this.state.selectedPhoneId)
       });
   }
 

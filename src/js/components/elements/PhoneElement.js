@@ -9,7 +9,7 @@ export class PhoneElement extends Component {
     this._element.innerHTML = this._render();
   }
 
-  _render() {
+  render() {
     return `
       <li class="thumbnail">
         <a href="#!/phones/${this._phoneInfo.id}" class="thumb">

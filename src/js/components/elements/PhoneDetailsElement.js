@@ -16,7 +16,7 @@ export default class PhoneDetailsElement extends Component {
     });
   }
 
-  _render() {
+  render() {
     return `
       <div>
         <div>
