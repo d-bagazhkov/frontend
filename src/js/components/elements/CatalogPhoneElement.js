@@ -20,7 +20,7 @@ export default class CatalogPhoneElement extends Component {
               <a href="#!/phones/${phone.id}">${phone.name}</a>
               <p>${phone.snippet}</p>
             </li>
-          `)}
+          `).join('') || ""}
         </ul>
       </div>
     `;
@@ -28,9 +28,12 @@ export default class CatalogPhoneElement extends Component {
 
   afterCreate() {
     this.repository = new PhoneRepository();
-    this.repository.getAllPhone((phones) => {
-      this.setState({phones});
-    });
+    this.repository.getAllPhone(this.updateState.bind(this));
+  }
+
+  updateState(phones) {
+    this.setState({phones});
+    console.log(this.state)
   }
 
 }
