@@ -1,26 +1,41 @@
-export default class PhoneRepository {
+'use strict';
 
-  request(path, callback) {
-    let xhr = new XMLHttpRequest();
+// export default class PhoneRepository {
 
-    xhr.open('GET', path, true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
+//     request(path, callback) {
+//         let xhr = new XMLHttpRequest();
 
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState !== 4 && xhr.status !== 200) return;
-      callback(JSON.parse(xhr.responseText || "[]"));
-    };
+//         xhr.open('GET', path, true);
+//         xhr.setRequestHeader('Content-Type', 'application/json');
 
-    xhr.send();
-  }
+//         xhr.onreadystatechange = function () {
+//             if (xhr.readyState !== 4 && xhr.status !== 200) return;
+//             callback(JSON.parse(xhr.responseText || "[]"));
+//         };
 
-  getAllPhone(callback) {
-    this.request("./src/api/phones.json", callback)
-  }
+//         xhr.send();
+//     }
 
-  getDetailsByIdPhone(id, callback) {
-    this.request(`./src/api/phones/${id}.json`, callback)
-  }
+//     getAllPhone(callback) {
+//         this.request("./src/api/phones.json", callback)
+//     }
 
+//     getDetailsByIdPhone(id, callback) {
+//         this.request(`./src/api/phones/${id}.json`, callback)
+//     }
 
+// }
+
+function request(path, callback) {
+    fetch(path)
+        .then(result => result.json())
+        .then(obj => callback(obj));
+}
+
+export function getAllPhone(callback) {
+    request("./src/api/phones.json", callback)
+}
+
+export  function getDetailsByIdPhone(id, callback) {
+    request(`./src/api/phones/${id}.json`, callback)
 }
