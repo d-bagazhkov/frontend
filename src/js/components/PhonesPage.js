@@ -5,6 +5,7 @@ import Sidebar from "./Sidebar.js";
 import CatalogPhone from "./CatalogPhone.js";
 import PhoneInfo from "./PhoneInfo.js";
 import BasketElement from "./BasketElement.js";
+import { getDetailsByIdPhone } from "../repository/PhoneRepository.js";
 
 export default class PhonesPage extends Component {
 
@@ -13,85 +14,91 @@ export default class PhonesPage extends Component {
 
         this.on(
             'phoneSelected',
-            '[data-catalog-phone]',
+            '[data-component-catalog-phone]',
             this.toggleView.bind(this));
+        this.on(
+            'addToBasket',
+            '[data-component-catalog-phone]',
+            this.addToBasket.bind(this));
 
         this.on(
             'backButtonPress',
-            '[data-phone-info]',
+            '[data-component-phone-info]',
             this.toggleView.bind(this));
+        this.on(
+            'addToBasket',
+            '[data-component-phone-info]',
+            this.addToBasket.bind(this));
 
         this.on(
             'searchInput',
-            '[data-sidebar]',
+            '[data-component-sidebar]',
             this.search.bind(this));
-
         this.on(
-            'selectFilter',
-            '[data-sidebar]',
-            this.filter.bind(this));
+            'selectSortKey',
+            '[data-component-sidebar]',
+            this.sort.bind(this));
 
-        this.on(
-            'addToBasket',
-            '[data-catalog-phone]',
-            this.addToBasket.bind(this));
-
-        this.on(
-            'addToBasket',
-            '[data-phone-info]',
-            this.addToBasket.bind(this));
+        this.getChild(PhoneInfo).hide()
+        this.getChild(CatalogPhone).show()
     }
 
     render() {
         return `
-        <div data-sidebar class="col-md-2">
+        <div data-component-sidebar class="col-md-2">
         </div>
-        ${this.selected
-                ? ` <div data-phone-info class="col-md-10"></div>`
-                : ` <div data-catalog-phone class="col-md-10"></div>`}
+        <div data-component-phone-info class="col-md-10"></div>
+        <div data-component-catalog-phone class="col-md-10"></div>
         `;
     }
 
     afterRender() {
         this.connect({
-            selector: '[data-sidebar]',
+            selector: '[data-component-sidebar]',
             component: Sidebar
         })
 
         this.connect({
-            selector: '[data-catalog-phone]',
+            selector: '[data-component-catalog-phone]',
             component: CatalogPhone
         })
 
         this.connect({
-            selector: '[data-phone-info]',
+            selector: '[data-component-phone-info]',
             component: PhoneInfo,
             props: { phoneId: this.selectedPhoneId }
         })
 
     }
 
-    toggleView(event) {
-        this.selected = !this.selected;
-        this.selectedPhoneId = event.phoneId;
-        this.drawing();
+    toggleView({ detail }) {
+        let phoneInfo = this.getChild(PhoneInfo);
+        let catalog = this.getChild(CatalogPhone);
+        if (detail)
+            getDetailsByIdPhone(detail, (phone) => {
+                phoneInfo.setProps({ phone });
+                catalog.hide();
+                phoneInfo.show();
+            });
+        else {
+            catalog.show();
+            phoneInfo.hide();
+        }
+            
+
     }
 
     search(event) {
         let catalog = this.getChild(CatalogPhone);
         if (catalog) {
-            console.log("update catalog phone (sort)");
-            catalog.setState({ search: event.inputValue });
-            catalog.drawing();
+            catalog.setProps({ search: event.detail });
         }
     }
 
-    filter(event) {
+    sort(event) {
         let catalog = this.getChild(CatalogPhone);
         if (catalog) {
-            console.log("update catalog phone (filter)");
-            catalog.setState({ filter: event.selectValue });
-            catalog.drawing();
+            catalog.setProps({ sort: event.detail });
         }
     }
 
@@ -99,10 +106,8 @@ export default class PhonesPage extends Component {
         let sidebar = this.getChild(Sidebar);
         if (sidebar) {
             let basket = sidebar.getChild(BasketElement);
-            if (basket instanceof Component) {
-                basket.setState({ values: [...(basket.state.values || []), event.phoneId] });
-                console.log("update sidebar. add to basket '" + event.phoneId + "'");
-                basket.drawing();
+            if (basket) {
+                basket.setProps({ values: [...(basket.props.values || []), event.detail] });
             }
         }
     }

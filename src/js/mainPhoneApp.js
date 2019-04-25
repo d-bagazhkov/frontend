@@ -5,15 +5,15 @@ import PhonesPage from './components/PhonesPage.js';
 import PageFooter from './components/PageFooter.js';
 
 new PageHeader({
-  selector: '[data-pageHeader]'
+  selector: '[data-component-header]'
 })
 
 new PhonesPage({
-  selector: '[data-pageData]'
+  selector: '[data-component-main]'
 })
 
 new PageFooter({
-  selector: '[data-pageFooter]'
+  selector: '[data-component-footer]'
 })
 
 

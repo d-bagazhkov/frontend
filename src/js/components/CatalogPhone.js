@@ -5,43 +5,49 @@ import { getAllPhone } from "../repository/PhoneRepository.js";
 
 export default class CatalogPhone extends Component {
 
-    eventPhoneSelected = new CustomEvent('phoneSelected', { bubbles: true });
-    eventAddToBasket = new CustomEvent('addToBasket', { bubbles: true });
-
     constructor(props) {
         super(props);
 
         getAllPhone(this.loadPhones.bind(this));
 
-        this.on('click', 'A[data-phone]', ({ target }) => {
-            this.eventPhoneSelected.phoneId = target.closest('LI').id;
-            this.element.dispatchEvent(this.eventPhoneSelected);
+        this.setAction({
+            nameEvent: 'click',
+            nameAction: 'phoneSelected',
+            selector: '[data-action-phone]',
+            detailCallback: ({target}) => {
+                return target.closest('LI').id;
+            }
         });
 
-        this.on('click', 'A[data-action-addToBasket]', ({ target }) => {
-            this.eventAddToBasket.phoneId = target.closest('LI').id;
-            this.element.dispatchEvent(this.eventAddToBasket);
+        this.setAction({
+            nameEvent: 'click',
+            nameAction: 'addToBasket',
+            selector: '[data-action-addToBasket]',
+            detailCallback: ({target}) => {
+                return target.closest('LI').id;
+            }
         });
+
     }
 
     render() {
-        let filterKey = this.state.filter || 'age';
+        let sortKey = this.props.sort || 'age';
         return `
         <ul class="phones">
         ${this.phones && this.phones.sort((a, b) => {
             
-            if (a[filterKey] < b[filterKey]) {
+            if (a[sortKey] < b[sortKey]) {
                 return -1;
             }
-            if (a[filterKey] > b[filterKey]) {
+            if (a[sortKey] > b[sortKey]) {
                 return 1;
             }
             return 0;
         }).map((phoneData) =>
-            phoneData.name.toLowerCase().includes((this.state.search || '').toLowerCase()) ?
+            phoneData.name.toLowerCase().includes((this.props.search || '').toLowerCase()) ?
                 `
             <li data-age="${phoneData.age}" id="${phoneData.id}" class="thumbnail">
-                <a data-phone href="#!/phones/${phoneData.id}" class="thumb">
+                <a data-action-phone href="#!/phones/${phoneData.id}" class="thumb">
                     <img alt="${phoneData.name}" src="./src/${phoneData.imageUrl}">
                 </a>
 
@@ -51,7 +57,7 @@ export default class CatalogPhone extends Component {
                     </a>
                 </div>
 
-                <a data-phone href="#!/phones/${phoneData.id}">${phoneData.name}</a>
+                <a data-action-phone href="#!/phones/${phoneData.id}">${phoneData.name}</a>
                 <p>${phoneData.snippet}</p>
             </li>
         ` : ''

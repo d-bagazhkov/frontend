@@ -15,11 +15,16 @@ export default class BasketElement extends Component {
                 this.phonesInfo[phone.id] = phone.name;
             });
             this.drawing();
+        });
+
+        this.on("click", "[data-phone-id]", ({ target }) => {
+            this.props.values = this.props.values.filter(id => id != target.dataset.phoneId);
+            this.drawing();
         })
     }
 
     beforeRender() {
-        this.state.values = this.uniqueArray(this.state.values)
+        this.props.values = this.uniqueArray(this.props.values)
     }
 
     uniqueArray(list) {
@@ -33,14 +38,12 @@ export default class BasketElement extends Component {
     }
 
     render() {
-        console.log(this.state);
-
         return `
         <p>Shopping Cart</p>
         <ul>
-            ${this.state.values
-                ? this.state.values.map(phoneId =>
-                    `<li>${this.phonesInfo[phoneId]}</li>`
+            ${this.props.values && this.props.values.length
+                ? this.props.values.map(phoneId =>
+                    `<li class=".addedItem" data-phone-id="${phoneId}">${this.phonesInfo[phoneId]}</li>`
                 ).join('')
                 : '<li>Empty</li>'}
         </ul>

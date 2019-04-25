@@ -4,21 +4,23 @@ import Component from "./Component.js";
 
 export default class SortElement extends Component {
 
-    eventSelectFilter = new CustomEvent('selectFilter', { bubbles: true });
-
     constructor(props) {
         super(props);
 
-        this.on('change', 'SELECT[data-filter]', ({ target }) => {
-            this.eventSelectFilter.selectValue = target.value;
-            this.element.dispatchEvent(this.eventSelectFilter);
+        this.setAction({
+            nameEvent: 'change',
+            nameAction: 'selectSortKey',
+            selector: '[data-action-select]',
+            detailCallback: ({ target }) => {
+                return target.value;
+            }
         });
     }
 
     render() {
         return `
             Sort by:
-            <select data-filter>
+            <select data-action-select>
                 <option value="name">Alphabetical</option>
                 <option value="age" selected>Newest</option>
             </select>
